@@ -2705,7 +2705,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardMatrix: {fileID: 1292686943}
-  uiManager: {fileID: 673429969}
   row: 2
   column: 2
   flipAllCardOnStartAfter: 1.4
@@ -4513,9 +4512,9 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 519420032}
   - {fileID: 1164308866}
-  - {fileID: 673429968}
+  - {fileID: 519420032}
   - {fileID: 1695581734}
   - {fileID: 651970959}
   - {fileID: 1292686944}
+  - {fileID: 673429968}
