@@ -25,12 +25,19 @@ public class CardMatrix : MonoBehaviour
     int _selectI, _selectJ;
     int _currentCardCount;
 
+    private void Awake()
+    {
+        cartdSprites = _cartdSprite;
+    }
+
     public void Init(int row, int column, string data)
     {
         _currentCardCount = countCard = row * column;
         this.row = row;
         this.column = column;
+        int[] cardsType = JsonConvert.DeserializeObject<int[]>(data);
         cards = new Card[row, column];
+        InstantiateCard(cardsType);
     }
 
     public void Init(int row, int column)
@@ -85,6 +92,26 @@ public class CardMatrix : MonoBehaviour
                 else
                     _currentCardCount--;
                 t++;
+            }
+        }
+
+
+        DOVirtual.DelayedCall(GameManager.instance.flipAllCardOnStartAfter, () =>
+        {
+            _canFlipCard = true;
+            CloseAllCard();
+        });
+    }
+
+    public void ResetMatrix()
+    {
+        _canFlipCard = false;
+        _selectCard = null;
+        foreach (var item in cards)
+        {
+            if (item)
+            {
+                Destroy(item.gameObject);
             }
         }
     }
@@ -153,6 +180,28 @@ public class CardMatrix : MonoBehaviour
         }
     }
 
+    void CloseAllCard()
+    {
+        foreach (var item in cards)
+        {
+            if (item)
+            {
+                item.FlipClose();
+            }
+        }
+    }
+
+    void OpenAllCard()
+    {
+        foreach (var item in cards)
+        {
+            if (item)
+            {
+                item.FlipOpen();
+            }
+        }
+    }
+
     Vector3 GetPositionInMatrix(int i, int j)
     {
         float centerMatixX = (_widthCard * (row + 1)) / 2;
@@ -173,5 +222,19 @@ public class CardMatrix : MonoBehaviour
 
         i = Mathf.RoundToInt(position.x - 1);
         j = Mathf.RoundToInt(position.y - 1);
+    }
+
+
+    internal string GetData()
+    {
+        int[] intDate = new int[countCard];
+        int i = 0;
+        foreach (var item in cards)
+        {
+            intDate[i] = (item) ? item.type : -1;
+            i++;
+        }
+
+        return JsonConvert.SerializeObject(intDate);
     }
 }
