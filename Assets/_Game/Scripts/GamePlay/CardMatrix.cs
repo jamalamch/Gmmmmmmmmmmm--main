@@ -1,5 +1,4 @@
 using DG.Tweening;
-using Newtonsoft.Json;
 using UnityEngine;
 
 public class CardMatrix : MonoBehaviour
@@ -35,7 +34,7 @@ public class CardMatrix : MonoBehaviour
         _currentCardCount = countCard = row * column;
         this.row = row;
         this.column = column;
-        int[] cardsType = JsonConvert.DeserializeObject<int[]>(data);
+        int[] cardsType = JsonUtility.FromJson<SeriInitArray>(data).arrayInit;
         cards = new Card[row, column];
         InstantiateCard(cardsType);
     }
@@ -235,6 +234,17 @@ public class CardMatrix : MonoBehaviour
             i++;
         }
 
-        return JsonConvert.SerializeObject(intDate);
+        return JsonUtility.ToJson(new SeriInitArray(intDate));
+    }
+}
+
+[System.Serializable]
+public class SeriInitArray
+{
+    public int[] arrayInit;
+
+    public SeriInitArray(int[] arrayInit)
+    {
+        this.arrayInit = arrayInit;
     }
 }
